@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -10,11 +11,15 @@ public class PlayerController : MonoBehaviour
     public CharacterController controller;
     private Vector3 moveDirection;
     public float gravityScale;
+    private int count;
+    public TextMeshProUGUI countText;
     // Start is called before the first frame update
     void Start()
     {
         //theRB = GetComponent<Rigidbody>();
         controller = GetComponent<CharacterController>();
+        count = 0;
+        SetCountText();
     }
 
     // Update is called once per frame
@@ -36,5 +41,17 @@ public class PlayerController : MonoBehaviour
 
         moveDirection.y = moveDirection.y + (Physics.gravity.y * gravityScale);
         controller.Move(moveDirection * Time.deltaTime);
+    }
+    void SetCountText(){
+        countText.text = "Count:"+count.ToString();
+    }
+    private void OnTriggerEnter(Collider other) {
+        if(other.gameObject.CompareTag("PickUp")){
+
+            other.gameObject.SetActive(false);
+            count++;
+            SetCountText();
+
+        }
     }
 }
